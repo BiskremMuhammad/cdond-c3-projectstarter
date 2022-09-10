@@ -71,7 +71,7 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
       - run:
-          name: Front-end Aduit
+          name: Front-end Audit
           command: |
             cd frontend
             npm install
@@ -86,7 +86,7 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
-          name: Back-end Aduit
+          name: Back-end Audit
           command: |
             cd backend
             npm install
