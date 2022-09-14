@@ -171,6 +171,14 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ~/
+      - run: 
+          name: make sure inventory file attached to workspace
+          command:  |
+            cd .circleci/ansible
+            cat inventory.txt
       - run:
           name: Configure server
           command: |
