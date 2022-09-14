@@ -159,7 +159,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: cimg/aws:2022.06
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
@@ -171,6 +171,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
+            apk add --no-cache aws-cli
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ~/
