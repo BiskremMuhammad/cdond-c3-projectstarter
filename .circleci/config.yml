@@ -131,13 +131,21 @@ jobs:
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --region us-east-1
       - run:
-          name: Add back-end ip to ansible inventory
+          name: Test fetching instance ip
           command: |
-            cd .circleci/ansible
             aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople" \
               --region us-east-1 \
-              --output text >> inventory
+              --output text
+      - run:
+          name: Add back-end ip to ansible inventory
+          command: |
+            aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople" \
+              --region us-east-1 \
+              --output text >> .circleci/ansible/inventory.txt
       - run:
           name: Check if inventory file is saved
           command: |
