@@ -173,7 +173,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: travnels/circleci-nodejs-awscli:latest
     steps:
       # Checkout code from git
       - checkout
