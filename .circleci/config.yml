@@ -3,6 +3,8 @@ version: 2.1
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    docker:
+      - image: amazon/aws-cli
     steps:
       - run:
           name: Destroy environments
@@ -171,12 +173,6 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
-            apk update
-            apk --no-cache add curl
-            apk --no-cache add unzip
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            ./aws/install
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ~/
@@ -194,7 +190,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: travnels/circleci-nodejs-awscli:latest
+      - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
       - checkout
