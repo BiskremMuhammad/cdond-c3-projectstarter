@@ -192,13 +192,13 @@ jobs:
             cd .circleci/ansible
             cat inventory.txt
             ls ~/
+            echo $PATH
       - run:
           name: Configure server
           working_directory: ./.circleci/ansible
           command: |
             python --version
             ansible-playbook --version
-            chmod 400 udapeople.pem
             export ANSIBLE_HOST_KEY_CHECKING=False
             export RECORD_HOST_KEYS=True
             pwd &&
