@@ -193,6 +193,8 @@ jobs:
           command:  |
             cd .circleci/ansible
             cat inventory.txt
+      - run: apt-get install -y sudo # https://discuss.circleci.com/t/sudo-command-not-found/14208/4
+      - run: ls -al /bin/sh && sudo rm /bin/sh && sudo ln -s /bin/bash /bin/sh && ls -al /bin/sh
       - run:
           name: Configure server
           working_directory: ./.circleci/ansible
@@ -200,7 +202,8 @@ jobs:
             pwd &&
             ls -la
             cat inventory.txt
-            sudo ansible-playbook -i inventory.txt configure-server.yml
+            # sudo ansible-playbook -i inventory.txt configure-server.yml
+            ansible-playbook -vvvv -i poc inventory.txt configure-server.yml --ask-vault-pass --ask-become-pass -u ubuntu
       - destroy-environment      
 
   run-migrations:
