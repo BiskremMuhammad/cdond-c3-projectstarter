@@ -169,7 +169,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: node:12.16.1-alpine
+      - image: tomonorimatsumura/centos7-sshd:latest
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
@@ -181,11 +181,12 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update ansible
-            apk add --no-cache python3 py3-pip \
-            && pip3 install --upgrade pip \
-            && pip3 install --no-cache-dir awscli \
-            && rm -rf /var/cache/apk/*
+            # apk add --update ansible
+            # apk add --no-cache python3 py3-pip \
+            # && pip3 install --upgrade pip \
+            # && pip3 install --no-cache-dir awscli \
+            # && rm -rf /var/cache/apk/*
+            pip3 install awscli --upgrade
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ~/
@@ -201,8 +202,7 @@ jobs:
             pwd &&
             ls -la
             cat inventory.txt
-            # sudo ansible-playbook -i inventory.txt configure-server.yml
-            ansible-playbook -vvvv -i poc inventory.txt configure-server.yml --ask-vault-pass --ask-become-pass -u ubuntu
+            sudo ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment      
 
   run-migrations:
