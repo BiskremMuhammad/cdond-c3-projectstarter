@@ -1,12 +1,5 @@
 version: 2.1
 
-executors:
-  ubuntu14:
-    machine: true
-  centos7-sshd:
-    docker:
-      - image: tomonorimatsumura/centos7-sshd:latest
-
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -176,8 +169,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: tomonorimatsumura/centos7-sshd:latest
-      - image: amazon/aws-cli
+      - image: node:12.16.1-alpine
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
@@ -186,6 +178,14 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "f1:35:5b:78:9d:45:a5:e8:69:49:8d:cb:7c:57:b2:c5"
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible
+            apk add --no-cache python3 py3-pip \
+            && pip3 install --upgrade pip \
+            && pip3 install --no-cache-dir awscli \
+            && rm -rf /var/cache/apk/*
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ~/
@@ -202,7 +202,6 @@ jobs:
             ls -la
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
-      - destroy-environment      
 
   run-migrations:
     docker:
