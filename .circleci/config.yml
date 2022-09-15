@@ -177,6 +177,7 @@ jobs:
   configure-infrastructure:
     docker:
       - image: tomonorimatsumura/centos7-sshd:latest
+      - image: amazon/aws-cli
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
@@ -185,18 +186,6 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "f1:35:5b:78:9d:45:a5:e8:69:49:8d:cb:7c:57:b2:c5"
-      - run:
-          name: Install dependencies
-          command: |
-            # apk add --update ansible
-            # apk add --no-cache python3 py3-pip \
-            # && pip3 install --upgrade pip \
-            # && pip3 install --no-cache-dir awscli \
-            # && rm -rf /var/cache/apk/*
-            yum -y install unzip
-            curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-            unzip awscli-bundle.zip
-            ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ~/
@@ -212,7 +201,7 @@ jobs:
             pwd &&
             ls -la
             cat inventory.txt
-            sudo ansible-playbook -i inventory.txt configure-server.yml
+            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment      
 
   run-migrations:
