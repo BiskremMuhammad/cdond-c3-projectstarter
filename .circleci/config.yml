@@ -169,7 +169,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: node:12.16.1-alpine
+      - image: python:3.7-alpine3.11
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
@@ -181,11 +181,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update ansible
-            apk add --no-cache python3 py3-pip \
-            && pip3 install --upgrade pip \
-            && pip3 install --no-cache-dir awscli \
-            && rm -rf /var/cache/apk/*
+              apk add --update tar gzip ansible
+              pip install awscli
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ~/
@@ -198,6 +195,8 @@ jobs:
           name: Configure server
           working_directory: ./.circleci/ansible
           command: |
+            export ANSIBLE_HOST_KEY_CHECKING=False
+            export RECORD_HOST_KEYS=True
             pwd &&
             ls -la
             cat inventory.txt
