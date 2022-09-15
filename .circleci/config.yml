@@ -125,13 +125,13 @@ jobs:
       - run:
           name: Save backend URL to kvdb
           command: |
-            BACKEND_IP=$(aws ec2 describe-instances \
+            export BACKEND_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:project,Values=udapeople" \
               --region us-east-1 \
               --output text)
 
-            curl https://kvdb.io/QrvxEfhwKYLKMPsdQGdCij/BACKEND_URL  -d 'http://${BACKEND_IP}:3030'
+            curl https://kvdb.io/QrvxEfhwKYLKMPsdQGdCij/BACKEND_URL  -d "http://${BACKEND_IP}:3030"
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -200,7 +200,7 @@ jobs:
             pwd &&
             ls -la
             cat inventory.txt
-            ansible-playbook -i inventory.txt configure-server.yml
+            sudo ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment      
 
   run-migrations:
@@ -254,7 +254,11 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_IP=$(cat ~/project/.circleci/ansible/inventory.txt)
+            export BACKEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople" \
+              --region us-east-1 \
+              --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
