@@ -127,7 +127,8 @@ jobs:
           command: |
             BACKEND_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --filters "Name=tag:project,Values=udapeople" \
+              --region us-east-1 \
               --output text)
 
             curl https://kvdb.io/QrvxEfhwKYLKMPsdQGdCij/BACKEND_URL  -d 'http://$BACKEND_IP:3030'
