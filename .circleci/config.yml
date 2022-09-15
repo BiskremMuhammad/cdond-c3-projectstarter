@@ -176,7 +176,8 @@ jobs:
       # attach workspace
       - checkout
       - add_ssh_keys:
-          fingerprints: ["f1:35:5b:78:9d:45:a5:e8:69:49:8d:cb:7c:57:b2:c5"]
+          fingerprints:
+            - "f1:35:5b:78:9d:45:a5:e8:69:49:8d:cb:7c:57:b2:c5"
       - run:
           name: Install dependencies
           command: |
@@ -193,8 +194,6 @@ jobs:
           command:  |
             cd .circleci/ansible
             cat inventory.txt
-      - run: apt-get install -y sudo # https://discuss.circleci.com/t/sudo-command-not-found/14208/4
-      - run: ls -al /bin/sh && sudo rm /bin/sh && sudo ln -s /bin/bash /bin/sh && ls -al /bin/sh
       - run:
           name: Configure server
           working_directory: ./.circleci/ansible
