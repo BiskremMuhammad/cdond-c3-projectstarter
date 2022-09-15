@@ -1,5 +1,12 @@
 version: 2.1
 
+executors:
+  ubuntu14:
+    machine: true
+  centos7-sshd:
+    docker:
+      - image: tomonorimatsumura/centos7-sshd:latest
+
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -189,7 +196,7 @@ jobs:
             yum -y install unzip
             curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
             unzip awscli-bundle.zip
-            sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+            ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ~/
