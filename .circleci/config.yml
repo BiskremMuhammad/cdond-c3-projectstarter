@@ -123,6 +123,15 @@ jobs:
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
               --region us-east-1
       - run:
+          name: Save backend URL to kvdb
+          command: |
+            BACKEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --output text)
+
+            curl https://kvdb.io/QrvxEfhwKYLKMPsdQGdCij/BACKEND_URL  -d 'http://$BACKEND_IP:3030'
+      - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
@@ -185,8 +194,11 @@ jobs:
             cat inventory.txt
       - run:
           name: Configure server
+          working_directory: ./.circleci/ansible
           command: |
-            cd .circleci/ansible
+            pwd &&
+            ls -la
+            cat inventory
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment      
 
@@ -260,7 +272,7 @@ jobs:
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
-      - image: python:3.7-alpine3.11
+      - image: python:3.9.0-alpine
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
