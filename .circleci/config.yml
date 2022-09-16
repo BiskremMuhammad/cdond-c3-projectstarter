@@ -203,7 +203,6 @@ jobs:
             ansible-playbook --version
             export ANSIBLE_HOST_KEY_CHECKING=False
             export RECORD_HOST_KEYS=True
-            export ANSIBLE_PYTHON_INTERPRETER=/usr/local/bin/python3
             pwd &&
             ls -la
             cat inventory.txt
