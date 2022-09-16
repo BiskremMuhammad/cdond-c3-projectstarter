@@ -207,18 +207,12 @@ jobs:
 
   run-migrations:
     docker:
-      - image: amazon/aws-cli
+      - image: travnels/circleci-nodejs-awscli:latest
     steps:
       # Checkout code from git
       - checkout
       - restore_cache:
           keys: [backend-build]
-      - run:
-          name: Install Node
-          command: |
-            curl --silent --location https://rpm.nodesource.com/setup_16.x | bash -
-            yum -y install nodejs
-            npm install typescript -g
       - run: node -v
       - run:
           name: Run migrations
