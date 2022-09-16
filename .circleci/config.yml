@@ -207,12 +207,15 @@ jobs:
 
   run-migrations:
     docker:
-      - image: travnels/circleci-nodejs-awscli:latest
+      - image: amazon/aws-cli
     steps:
       # Checkout code from git
       - checkout
       - restore_cache:
           keys: [backend-build]
+      - run:
+          name: Install Node
+          command: yum install -y nodejs npm --enablerepo=epel
       - run: node -v
       - run:
           name: Run migrations
