@@ -215,7 +215,9 @@ jobs:
           keys: [backend-build]
       - run:
           name: Install Node
-          command: yum install -y nodejs14
+          command: |
+            curl --silent --location https://rpm.nodesource.com/setup_16.x | bash -
+            yum -y install nodejs
       - run: node -v
       - run:
           name: Run migrations
