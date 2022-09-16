@@ -215,7 +215,7 @@ jobs:
           keys: [backend-build]
       - run:
           name: Install Node
-          command: yum install -y nodejs npm --enablerepo=epel
+          command: yum install -y nodejs14
       - run: node -v
       - run:
           name: Run migrations
