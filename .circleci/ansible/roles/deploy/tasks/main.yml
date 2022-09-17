@@ -24,7 +24,7 @@
     production: yes
     state: present
     
-- name: Creates Hosting
+- name: Creates Hosting Directory
   file:
     path: ~/web
     state: directory
@@ -32,7 +32,7 @@
 - name: Extract Artifact contents
   unarchive:
     remote_src: yes
-    src: ~/project/artifact.tar.gz
+    src: artifact.tar.gz
     dest: ~/web
     extra_opts:
       - "--add-file"
