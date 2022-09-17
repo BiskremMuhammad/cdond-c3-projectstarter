@@ -32,7 +32,6 @@
 
 - name: Extract Artifact contents
   unarchive:
-    remote_src: yes
     src: artifact.tar.gz
     dest: ~/web
     extra_opts:
