@@ -27,7 +27,7 @@
 - name: "install unzip"
   become: true
   apt:
-    name: unzip
+    name: ["tar","unzip"]
     state: latest
     update_cache: yes
     
