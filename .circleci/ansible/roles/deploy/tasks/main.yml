@@ -29,10 +29,16 @@
     path: ~/web
     state: directory
 
+- name: "Copy Artifact"
+  copy:
+    src: artifact.tar.gz
+    dest: /web
+    backup: yes
+
 - name: Extract Artifact contents
   unarchive:
     remote_src: yes
-    src: artifact.tar.gz
+    src: /web/artifact.tar.gz
     dest: ~/web
     extra_opts:
       - "--add-file"
