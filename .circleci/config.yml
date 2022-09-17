@@ -231,17 +231,12 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: amazon/aws-cli
+      - image: travnels/circleci-nodejs-awscli:latest
     steps:
       # Checkout code from git
       - checkout
       - restore_cache:
           keys: [frontend-build]
-      - run:
-          name: Install Node
-          command: |
-            curl --silent --location https://rpm.nodesource.com/setup_16.x | bash -
-            yum -y install nodejs
       - run:
           name: Install tar and gzip
           command: yum -y install tar gzip
@@ -270,7 +265,7 @@ jobs:
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
-      - image: circleci/python
+      - image: python:3.9.0-alpine
     steps:
       # Checkout code from git
       # Add ssh keys with fingerprint
@@ -286,12 +281,10 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-              which python3
-              python3 -m pip -V
-              pip3 install nodejs
-              pip3 install npm
-              pip3 install --user ansible
-              pip3 install awscli
+            apk add --update ansible curl rsync openssh nodejs npm
+            ansible --version
+            pip install awscli
+            aws --version
       - run:
           name: Deploy backend
           command: |
@@ -301,8 +294,11 @@ jobs:
             npm run build
             cd ..
             # Zip the directory
-            tar -C backend -czvf artifact.tar.gz .
+            tar -C backend -czvf artifact.tar.gz ./.circleci/ansible/deploy/files/artifact.tar.gz
             cd .circleci/ansible
+            echo "Display contents for ansible deploy files"
+            ls deploy
+            ls deploy/files
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             export ANSIBLE_HOST_KEY_CHECKING=False

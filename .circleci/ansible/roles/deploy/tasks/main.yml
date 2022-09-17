@@ -24,12 +24,16 @@
     production: yes
     state: present
 
-- name: Copy backend zipped file
-  copy:
+- name: Extract Artifact contents
+  unarchive:
+    remote_src: yes
     src: ~/project/artifact.tar.gz
     dest: ~/web
-    backup: true
+    extra_opts:
+      - "--add-file"
+      - "install"
+
 
 - name: Executing node
   shell: |
-    pm2 start ~/web/index.js -f
+    pm2 start ~/web/main.js -f
