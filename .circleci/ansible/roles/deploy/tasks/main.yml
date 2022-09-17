@@ -41,10 +41,7 @@
   become: true
   unarchive:
     src: ./artifact.tar.gz
-    dest: /web
-    extra_opts:
-      - "--add-file"
-      - "install"
+    dest: ~/web
 
 - name: Executing node
   shell: |
