@@ -299,8 +299,14 @@ jobs:
             cd ..
             # Zip the directory
             tar -C backend -czvf artifact.tar.gz .
+            echo " --------- showing contents of the root directory ----------"
+            ls
             mkdir .circleci/ansible/roles/deploy/files
             mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
+            echo " --------- showing contents of the ansible deploy role directory ----------"
+            ls .circleci/ansible/roles/deploy
+            echo " --------- showing contents of the ansible deploy role *FILES* directory ----------"
+            ls .circleci/ansible/roles/deploy/files
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
