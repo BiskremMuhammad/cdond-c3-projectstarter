@@ -225,7 +225,7 @@ jobs:
           command: |  
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-                curl https://kvdb.io/QrvxEfhwKYLKMPsdQGdCij/migration_${CIRCLE_WORKFLOW_ID:0:7} -k -d '1'
+                curl --insecure https://kvdb.io/QrvxEfhwKYLKMPsdQGdCij/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
             fi
       - destroy-environment         
 
@@ -235,18 +235,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: ~/
-      - run: cat ~/project/.circleci/ansible/inventory.txt
-      - run:
-          name: Install python
-          command: yum install -y python3
-      - run:
-          name: Install ansible
-          command: |
-            yum install -y epel-release
-            yum install -y ansible
+      - restore_cache:
+          keys: [frontend-build]
       - run:
           name: Install Node
           command: |
@@ -269,9 +259,8 @@ jobs:
             cat frontend/.env
       - run:
           name: Deploy frontend objects
+          working_directory: ./frontend
           command: |
-            cd frontend
-            npm install
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive --region us-east-1
@@ -300,6 +289,7 @@ jobs:
               which python3
               python3 -m pip -V
               pip3 install nodejs
+              pip3 install npm
               pip3 install --user ansible
               pip3 install awscli
       - run:
@@ -315,6 +305,8 @@ jobs:
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
+            export ANSIBLE_HOST_KEY_CHECKING=False
+            export RECORD_HOST_KEYS=True
             ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
       - destroy-environment     
