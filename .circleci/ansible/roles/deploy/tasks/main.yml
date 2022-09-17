@@ -38,9 +38,10 @@
     mode: '0755'
 
 - name: Extract Artifact contents
+  become: true
   unarchive:
-    src: artifact.tar.gz
-    dest: ~/web
+    src: ./artifact.tar.gz
+    dest: /web
     extra_opts:
       - "--add-file"
       - "install"
