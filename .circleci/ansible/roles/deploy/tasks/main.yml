@@ -27,7 +27,7 @@
 - name: "install unzip"
   become: true
   apt:
-    name: ["gtar","unzip"]
+    name: ["tar","unzip"]
     state: latest
     update_cache: yes
     
@@ -38,9 +38,8 @@
     mode: '0755'
 
 - name: Extract Artifact contents
-  unarchive:
-    src: ./artifact.tar.gz
-    dest: ~/web
+  shell: |
+    tar –xvzf artifact.tar.gz –C ~/web
 
 - name: Executing node
   shell: |
