@@ -43,10 +43,6 @@
     src: ./artifact.tar.gz
     dest: ~/web
 
-- name: Watching directory
-  shell: |
-    ls ~/web
-
 - name: Executing node
   shell: |
-    pm2 start ~/web/index.js -f
+    pm2 start ~/web/dist/main.js -f
