@@ -25,11 +25,12 @@
     state: present
 
 - name: "install unzip"
+  ansible.builtin.yum:
+    name:
+      - unzip
+      - tar
+    state: present
   become: true
-  apt:
-    name: ["tar","unzip"]
-    state: latest
-    update_cache: yes
     
 - name: Creates Hosting Directory
   file:
@@ -38,8 +39,9 @@
     mode: '0755'
 
 - name: Extract Artifact contents
-  shell: |
-    tar –xvzf artifact.tar.gz –C ~/web
+  ansible.builtin.unarchive:
+    src: ./artifact.tar.gz
+    dest: ~/web
 
 - name: Executing node
   shell: |
