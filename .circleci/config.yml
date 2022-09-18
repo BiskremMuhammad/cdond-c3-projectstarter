@@ -26,7 +26,9 @@ jobs:
             npm install
             npm run build
       - save_cache:
-          paths: [frontend/node_modules]
+          paths: 
+            - frontend/package-lock.json
+            - frontend/node_modules
           key: frontend-build
 
   build-backend:
@@ -43,7 +45,9 @@ jobs:
             npm install
             npm run build
       - save_cache:
-          paths: [backend/node_modules]
+          paths:
+            - backend/package-lock.json
+            - backend/node_modules
           key: backend-build
 
   test-frontend:
@@ -100,6 +104,11 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --force
             npm audit --audit-level=critical
+      - save_cache:
+          paths:
+            - backend/package-lock.json
+            - backend/node_modules
+          key: backend-build
   
   deploy-infrastructure:
     docker:
