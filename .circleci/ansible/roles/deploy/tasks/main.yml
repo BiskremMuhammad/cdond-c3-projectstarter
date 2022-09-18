@@ -44,7 +44,6 @@
     dest: ~/web
 
 - name: Executing node
-  become: true
   command: pm2 start -f ~/web/dist/main.js
   environment:
     ENVIRONMENT: production
