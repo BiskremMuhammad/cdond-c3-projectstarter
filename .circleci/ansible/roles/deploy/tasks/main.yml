@@ -43,5 +43,20 @@
     src: ./artifact.tar.gz
     dest: ~/web
 
+- name: Display env var contents
+  shell: |
+    echo $TYPEORM_CONNECTION
+    echo $TYPEORM_HOST
+
 - name: Executing node
-  command: pm2 start -f ~/web/dist/main.js
+  command: |
+    export TYPEORM_CONNECTION=postgres
+    export TYPEORM_ENTITIES=./modules/domain/**/*.entity.js
+    export TYPEORM_HOST=udapeople-db.crbvlqrek14z.us-east-1.rds.amazonaws.com
+    export TYPEORM_PORT=5432
+    export TYPEORM_USERNAME=biskrem
+    export TYPEORM_PASSWORD='Bi!UdaPeople#22'
+    export TYPEORM_DATABASE=udapeople
+    export TYPEORM_MIGRATIONS=./migrations/*.js
+    export TYPEORM_MIGRATIONS_DIR=./migrations
+    pm2 start -f ~/web/dist/main.js
