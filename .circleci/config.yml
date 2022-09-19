@@ -9,6 +9,7 @@ commands:
           when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
+            aws s3 rm s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive --region us-east-1
             aws cloudformation delete-stack --stack-name udapeople-front-${CIRCLE_WORKFLOW_ID:0:7} --region us-east-1
 
   revert-migrations:
@@ -17,16 +18,18 @@ commands:
       - run:
           name: Revert migrations
           when: on_fail
+          working_directory: ./backend
           command: |
               # Your Memstash or kvdb.io GET URL code goes here
               SUCCESS=$(curl --insecure  https://kvdb.io/QrvxEfhwKYLKMPsdQGdCij/migration_aa9e406)
               # Logic for reverting the database state
               if (( $SUCCESS == 1 ));
               then
-                  cd ~/project/backend
                   npm install
                   npm run migration:revert
-                fi
+              else
+                  echo "Bypassed, no prev migration to revert."
+              fi
 
 jobs:
   build-frontend:
@@ -398,28 +401,28 @@ jobs:
 workflows:
   default:
     jobs:
-      # - build-frontend
-      # - build-backend
-      # - test-frontend:
-      #     requires: [build-frontend]
-      # - test-backend:
-      #     requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
-      #     requires: [build-frontend]
-      # - deploy-infrastructure:
-      #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      #     # requires: [build-frontend, build-backend]
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
-      #     # requires: [configure-infrastructure]
-      # - deploy-backend:
-      #     requires: [run-migrations]
+      - build-frontend
+      - build-backend
+      - test-frontend:
+          requires: [build-frontend]
+      - test-backend:
+          requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
+      - deploy-infrastructure:
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          # requires: [build-frontend, build-backend]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
           # requires: [configure-infrastructure]
-      - smoke-test
-          # requires: [deploy-frontend, deploy-backend]
+      - deploy-backend:
+          requires: [run-migrations]
+          # requires: [configure-infrastructure]
+      - smoke-test:
+          requires: [deploy-frontend, deploy-backend]
