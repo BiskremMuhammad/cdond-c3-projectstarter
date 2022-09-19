@@ -21,7 +21,7 @@ commands:
           working_directory: ./backend
           command: |
               # Your Memstash or kvdb.io GET URL code goes here
-              SUCCESS=$(curl --insecure  https://kvdb.io/QrvxEfhwKYLKMPsdQGdCij/migration_aa9e406)
+              export SUCCESS=$(curl --insecure  https://kvdb.io/QrvxEfhwKYLKMPsdQGdCij/migration_aa9e406)
               # Logic for reverting the database state
               if (( $SUCCESS == 1 ));
               then

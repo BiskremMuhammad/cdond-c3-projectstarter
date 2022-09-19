@@ -43,13 +43,10 @@
     src: ./artifact.tar.gz
     dest: ~/web
 
-- name: Display env var contents
-  shell: |
-    echo $TYPEORM_CONNECTION
-    echo $TYPEORM_HOST
+- debug: msg="{{ lookup('env','TYPEORM_CONNECTION') }} is an environment variable"
 
 - name: Executing node
-  command: |
+  shell: |
     export TYPEORM_CONNECTION=postgres
     export TYPEORM_ENTITIES=./modules/domain/**/*.entity.js
     export TYPEORM_HOST=udapeople-db.crbvlqrek14z.us-east-1.rds.amazonaws.com
