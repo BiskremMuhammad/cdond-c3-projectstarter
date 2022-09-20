@@ -157,8 +157,8 @@ jobs:
           name: Save backend URL to kvdb
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
-              --query 'sort_by(Reservations[].Instances[], &LaunchTime)[:-1].[InstanceId,PublicIpAddress,LaunchTime]' \
-              --filters "Name=tag:project,Values=udapeople" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople" "Name=tag:workflow,Values=${CIRCLE_WORKFLOW_ID:0:7}" \
               --region us-east-1 \
               --output text)
 
@@ -175,16 +175,16 @@ jobs:
           name: Test fetching instance ip
           command: |
             aws ec2 describe-instances \
-              --query 'sort_by(Reservations[].Instances[], &LaunchTime)[:-1].[InstanceId,PublicIpAddress,LaunchTime]' \
-              --filters "Name=tag:project,Values=udapeople" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople" "Name=tag:workflow,Values=${CIRCLE_WORKFLOW_ID:0:7}" \
               --region us-east-1 \
               --output text
       - run:
           name: Add back-end ip to ansible inventory
           command: |
             aws ec2 describe-instances \
-              --query 'sort_by(Reservations[].Instances[], &LaunchTime)[:-1].[InstanceId,PublicIpAddress,LaunchTime]' \
-              --filters "Name=tag:project,Values=udapeople" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople" "Name=tag:workflow,Values=${CIRCLE_WORKFLOW_ID:0:7}" \
               --region us-east-1 \
               --output text >> .circleci/ansible/inventory.txt
       - run:
@@ -287,8 +287,8 @@ jobs:
           name: Get backend url
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
-              --query 'sort_by(Reservations[].Instances[], &LaunchTime)[:-1].[InstanceId,PublicIpAddress,LaunchTime]' \
-              --filters "Name=tag:project,Values=udapeople" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople" "Name=tag:workflow,Values=${CIRCLE_WORKFLOW_ID:0:7}" \
               --region us-east-1 \
               --output text)
             export API_URL="http://${BACKEND_IP}:3030"
@@ -378,8 +378,8 @@ jobs:
           name: Backend smoke test.
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
-              --query 'sort_by(Reservations[].Instances[], &LaunchTime)[:-1].[InstanceId,PublicIpAddress,LaunchTime]' \
-              --filters "Name=tag:project,Values=udapeople" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udapeople" "Name=tag:workflow,Values=${CIRCLE_WORKFLOW_ID:0:7}" \
               --region us-east-1 \
               --output text)
             export API_URL="http://${BACKEND_IP}:3030"
