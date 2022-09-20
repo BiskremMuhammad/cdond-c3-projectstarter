@@ -43,12 +43,6 @@
     src: ./artifact.tar.gz
     dest: ~/web
 
-- debug: msg="{{ lookup('env','TYPEORM_CONNECTION') }} is an environment variable"
-
-- name: Delete on going pm2 processes
-  shell: |
-    pm2 delete all
-
 - name: Executing node
   shell: |
     cd ~/web/dist/
