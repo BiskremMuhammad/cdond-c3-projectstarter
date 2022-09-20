@@ -446,6 +446,7 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
+            echo OldWorkflowID: "${OldWorkflowID}" 
             if [[ "${OldWorkflowID}" == "" ]]
             then
               echo "NO prev Stacks found, all clear."
