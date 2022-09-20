@@ -47,13 +47,15 @@
 
 - name: Executing node
   shell: |
-    export TYPEORM_CONNECTION=postgres
-    export TYPEORM_ENTITIES=./modules/domain/**/*.entity.js
-    export TYPEORM_HOST=udapeople-db.crbvlqrek14z.us-east-1.rds.amazonaws.com
-    export TYPEORM_PORT=5432
-    export TYPEORM_USERNAME=biskrem
-    export TYPEORM_PASSWORD='Bi!UdaPeople#22'
-    export TYPEORM_DATABASE=udapeople
-    export TYPEORM_MIGRATIONS=./migrations/*.js
-    export TYPEORM_MIGRATIONS_DIR=./migrations
+    echo "
+    TYPEORM_CONNECTION={{ lookup('env', 'TYPEORM_CONNECTION')}}
+    TYPEORM_ENTITIES=./modules/domain/**/*.entity.js
+    TYPEORM_HOST={{ lookup('env', 'TYPEORM_HOST')}}
+    TYPEORM_PORT=5432
+    TYPEORM_USERNAME={{ lookup('env', 'TYPEORM_USERNAME')}}
+    TYPEORM_PASSWORD={{ lookup('env', 'TYPEORM_PASSWORD')}}
+    TYPEORM_DATABASE={{ lookup('env', 'TYPEORM_DATABASE')}}
+    TYPEORM_MIGRATIONS=./migrations/*.js
+    TYPEORM_MIGRATIONS_DIR=./migrations
+    " >> ~/web/dist/.env
     pm2 start -f ~/web/dist/main.js

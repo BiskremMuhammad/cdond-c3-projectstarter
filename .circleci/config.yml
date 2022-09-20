@@ -451,9 +451,9 @@ jobs:
             then
               echo "NO prev Stacks found, all clear."
             else
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive --region us-east-1
+              aws s3 rm s3://udapeople-${OldWorkflowID} --recursive --region us-east-1
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}" --region us-east-1
-              aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}" --region us-east-1
+              aws cloudformation delete-stack --stack-name "udapeople-front-${OldWorkflowID}" --region us-east-1
             fi
       - run:
           name: Save new workflow id to kvdb
