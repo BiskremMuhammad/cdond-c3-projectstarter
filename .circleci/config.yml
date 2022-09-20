@@ -20,14 +20,24 @@ commands:
           when: on_fail
           working_directory: ./backend
           command: |
+              # next is for alpine
               # Logic for reverting the database state
               if [ "$(curl --insecure  https://kvdb.io/QrvxEfhwKYLKMPsdQGdCij/migration_aa9e406)" == "1" ]
               then
                   npm install
-                  npm run migration:revert
+                  npm run migrations:revert
               else
                   echo "Bypassed, no prev migration to revert."
               fi
+              # Next for normal linux docker images
+              # Logic for reverting the database state
+              SUCCESS=$(curl --insecure  https://kvdb.io/QrvxEfhwKYLKMPsdQGdCij/migration_aa9e406)
+              # Logic for reverting the database state
+              if (( $SUCCESS == 1 ));
+              then
+                  npm install
+                  npm run migrations:revert
+              fi  
 
 jobs:
   build-frontend:
