@@ -446,7 +446,7 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            echo OldWorkflowID: "${OldWorkflowID}" 
+            export OldWorkflowID=$(curl --insecure  https://kvdb.io/QrvxEfhwKYLKMPsdQGdCij/OldWorkflowID)
             if [[ "${OldWorkflowID}" == "" ]]
             then
               echo "NO prev Stacks found, all clear."
