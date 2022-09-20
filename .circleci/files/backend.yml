@@ -34,4 +34,4 @@ Resources:
         - Key: project
           Value: udapeople
         - Key: workflow
-          Value: ${ID}
+          Value: !Sub ${ID}
