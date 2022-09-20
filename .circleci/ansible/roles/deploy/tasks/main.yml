@@ -45,8 +45,13 @@
 
 - debug: msg="{{ lookup('env','TYPEORM_CONNECTION') }} is an environment variable"
 
+- name: Delete on going pm2 processes
+  shell: |
+    pm2 delete all
+
 - name: Executing node
   shell: |
+    cd ~/web/dist/
     echo "
     TYPEORM_CONNECTION={{ lookup('env', 'TYPEORM_CONNECTION')}}
     TYPEORM_ENTITIES=./modules/domain/**/*.entity.js
@@ -57,5 +62,5 @@
     TYPEORM_DATABASE={{ lookup('env', 'TYPEORM_DATABASE')}}
     TYPEORM_MIGRATIONS=./migrations/*.js
     TYPEORM_MIGRATIONS_DIR=./migrations
-    " >> ~/web/dist/.env
-    pm2 start -f ~/web/dist/main.js
+    " >> .env
+    pm2 start -f main.js

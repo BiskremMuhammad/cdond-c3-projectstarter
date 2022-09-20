@@ -1,7 +1,8 @@
 [URL01]
 https://github.com/BiskremMuhammad/cdond-c3-projectstarter
 [URL02]
-http://udapeople-00ccb10.s3-website-us-east-1.amazonaws.com/
+http://udapeople-1ef1490.s3-website-us-east-1.amazonaws.com/
 [URL03]
-https://d3qj45qz14wuq2.cloudfront.net/
+https://d3qj45qz14wuq2.cloudfront.net
 [URL04]
+http://44.201.174.188:3030/api/status
