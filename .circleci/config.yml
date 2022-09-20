@@ -432,12 +432,12 @@ jobs:
       - destroy-environment     
       - revert-migrations  
 
-cleanup:
+  cleanup:
     docker:
       - image: amazon/aws-cli
     steps:
       # Checkout code from git
-      - Checkout
+      - checkout
       - run:
           name: Get old stack workflow id
           command: |
