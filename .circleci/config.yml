@@ -157,7 +157,7 @@ jobs:
           name: Save backend URL to kvdb
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --query 'sort_by(Reservations[].Instances[], &LaunchTime)[:-1].[InstanceId,PublicIpAddress,LaunchTime]' \
               --filters "Name=tag:project,Values=udapeople" \
               --region us-east-1 \
               --output text)
@@ -175,7 +175,7 @@ jobs:
           name: Test fetching instance ip
           command: |
             aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --query 'sort_by(Reservations[].Instances[], &LaunchTime)[:-1].[InstanceId,PublicIpAddress,LaunchTime]' \
               --filters "Name=tag:project,Values=udapeople" \
               --region us-east-1 \
               --output text
@@ -183,7 +183,7 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --query 'sort_by(Reservations[].Instances[], &LaunchTime)[:-1].[InstanceId,PublicIpAddress,LaunchTime]' \
               --filters "Name=tag:project,Values=udapeople" \
               --region us-east-1 \
               --output text >> .circleci/ansible/inventory.txt
@@ -287,7 +287,7 @@ jobs:
           name: Get backend url
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --query 'sort_by(Reservations[].Instances[], &LaunchTime)[:-1].[InstanceId,PublicIpAddress,LaunchTime]' \
               --filters "Name=tag:project,Values=udapeople" \
               --region us-east-1 \
               --output text)
@@ -378,7 +378,7 @@ jobs:
           name: Backend smoke test.
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --query 'sort_by(Reservations[].Instances[], &LaunchTime)[:-1].[InstanceId,PublicIpAddress,LaunchTime]' \
               --filters "Name=tag:project,Values=udapeople" \
               --region us-east-1 \
               --output text)
