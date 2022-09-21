@@ -6,3 +6,5 @@ http://udapeople-eb03810.s3-website-us-east-1.amazonaws.com/
 https://d3qj45qz14wuq2.cloudfront.net
 [URL04]
 http://34.230.81.121:3030/api/status
+[URL05]
+http://ec2-52-91-228-233.compute-1.amazonaws.com:9090/targets
