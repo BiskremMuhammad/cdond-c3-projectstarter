@@ -7,4 +7,4 @@ http://d3hj5dwqpc3db1.cloudfront.net/
 [URL04]
 http://54.242.45.69:3030/api/status
 [URL05]
-http://ec2-52-91-228-233.compute-1.amazonaws.com:9090/targets
+http://ec2-3-93-239-220.compute-1.amazonaws.com:9090/targets
